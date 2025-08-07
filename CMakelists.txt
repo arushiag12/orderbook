@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.5.0)
+project(orderbook VERSION 1.0 LANGUAGES CXX)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_executable(trades 
+  driver.cpp
+)
 
-add_executable(trades driver.cpp)
+target_include_directories(trades
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+)

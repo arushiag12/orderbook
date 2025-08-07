@@ -12,23 +12,18 @@ using orders::OrderTypes;
 using orderbook::Orderbook;
 namespace requests {
 
-
-
 struct Request 
 {
     virtual void process(Orderbook& orderbook) = 0;
     virtual ~Request() = default;
 };
 
-
 template <typename OrderType>
 requires CheckValidOrderType_v<OrderType, OrderTypes>
 struct ValidRequest : public Request 
-
 {
     using type = OrderType;
 };
-
 
 template <typename OrderType>
 struct AddRequest : public ValidRequest<OrderType>
@@ -47,7 +42,6 @@ struct AddRequest : public ValidRequest<OrderType>
 template <typename OrderType>
 using AddRequest_t = AddRequest<OrderType>::type;
 
-
 template <typename OrderType>
 struct CancelRequest : public ValidRequest<OrderType>
 {
@@ -64,12 +58,9 @@ struct CancelRequest : public ValidRequest<OrderType>
 template <typename OrderType>
 using CancelRequest_t = CancelRequest<OrderType>::type;
 
-
 void processRequest(std::unique_ptr<Request> request, Orderbook& orderbook) {
     request->process(orderbook);
 }
-
-
 
 }
 #endif
