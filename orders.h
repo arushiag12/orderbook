@@ -37,7 +37,6 @@ struct Order {
         return price < other.price;
     }
 };
-OrderId Order::currOrderIdCount = 0;
 
 struct MarketOrder : public Order { using Order::Order; };
 struct LimitOrder : public Order {using Order::Order; };

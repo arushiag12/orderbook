@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(trades 
   driver.cpp
+  orders.cpp
+  logger.cpp
 )
 
 target_include_directories(trades

@@ -5,21 +5,41 @@
 #include "orderbook.h"
 #include "orders.h"
 #include "basicdefs.h"
-#include "testdata.h"
+#include "csvparser_simple.h"
 #include "output.h"
+#include "logger.h"
 
 using namespace basicdefs;
 using namespace orders;
 using namespace orderbook;
 using namespace requests;
-using namespace testdata;
+using namespace csvparser_simple;
 using namespace output_orderbook;
+using namespace logger;
 
-int main() {
+int main(int argc, char* argv[]) {
+    // Initialize logging system
+    initializeLogger("transactions.log", "errors.log");
+    
     Orderbook orderbook;
     std::vector<std::unique_ptr<Request>> trades;
 
-    generate_requests(trades);
+    // Default to orders.csv if no filename provided
+    std::string filename = (argc > 1) ? argv[1] : "orders.csv";
+    
+    std::cout << "=== Orderbook Trading System ===" << std::endl;
+    std::cout << "Loading orders from: " << filename << std::endl;
+    std::cout << "Logs will be written to: transactions.log and errors.log\n" << std::endl;
+    
+    loadOrdersFromCSV(filename, trades);
+    
+    if (trades.empty()) {
+        std::cout << "No orders loaded. Exiting." << std::endl;
+        shutdownLogger();
+        return 1;
+    }
+    
+    std::cout << "Loaded " << trades.size() << " orders successfully.\n" << std::endl;
 
     // timestamp before processing
     auto t0 = std::chrono::high_resolution_clock::now();
@@ -38,9 +58,15 @@ int main() {
 
     std::cout << orderbook;
     std::cout 
-      << "Processed " << trades.size() 
+      << "\nProcessed " << trades.size() 
       << " requests in " << secs << " s  (" 
-      << tput << " req/s)\n";
+      << tput << " req/s)\n" << std::endl;
+      
+    std::cout << "Check transactions.log for detailed transaction history." << std::endl;
+    std::cout << "Check errors.log for any errors encountered during processing." << std::endl;
 
+    // Shutdown logging system
+    shutdownLogger();
+    
     return 0;
 }
