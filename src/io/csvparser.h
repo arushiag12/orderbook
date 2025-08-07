@@ -64,13 +64,18 @@ void loadOrdersFromCSV(const std::string& filename, std::vector<std::unique_ptr<
         
         try {
             auto tokens = split(line, ',');
-            if (tokens.size() < 6) {
+            if (tokens.size() < 5) {
                 std::string error_msg = "Insufficient columns in line " + std::to_string(line_number);
                 if (g_logger) {
-                    g_logger->logError(error_msg, "Expected 6 columns, got " + std::to_string(tokens.size()));
+                    g_logger->logError(error_msg, "Expected at least 5 columns, got " + std::to_string(tokens.size()));
                 }
                 failed_orders++;
                 continue;
+            }
+            
+            // Ensure we have 6 tokens by adding empty string for missing order_id
+            if (tokens.size() == 5) {
+                tokens.push_back("");
             }
             
             std::string action = tokens[0];
