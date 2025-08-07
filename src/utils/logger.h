@@ -75,11 +75,11 @@ public:
             transaction_file.flush();
         }
         
-        // Also log to console
-        std::cout << "[TRANSACTION] " << getCurrentTimestamp() 
-                 << " - Order " << buy_order_id << " <-> Order " << sell_order_id
-                 << " | Price: " << price << " | Qty: " << quantity 
-                 << " | Status: " << status << std::endl;
+        // // Also log to console
+        // std::cout << "[TRANSACTION] " << getCurrentTimestamp() 
+        //          << " - Order " << buy_order_id << " <-> Order " << sell_order_id
+        //          << " | Price: " << price << " | Qty: " << quantity 
+        //          << " | Status: " << status << std::endl;
     }
     
     void logError(const std::string& error_message, const std::string& context = "") {
@@ -93,8 +93,8 @@ public:
             error_file.flush();
         }
         
-        // Also log to console
-        std::cerr << "[ERROR] " << full_message << std::endl;
+        // // Also log to console
+        // std::cerr << "[ERROR] " << full_message << std::endl;
     }
     
     void logInfo(const std::string& info_message) {
@@ -105,7 +105,7 @@ public:
             error_file.flush();
         }
         
-        std::cout << "[INFO] " << full_message << std::endl;
+        // std::cout << "[INFO] " << full_message << std::endl;
     }
     
     void logOrderAdded(OrderId order_id, const std::string& order_type, 

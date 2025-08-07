@@ -5,8 +5,8 @@
 #include <memory>
 #include "orderdata.h"
 #include "requests.h"
-#include "../core/orders.h"
-#include "../core/orderbook.h"
+#include "core/orders.h"
+#include "core/orderbook.h"
 
 using namespace orderdata;
 using namespace requests;

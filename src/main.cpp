@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
     
     std::cout << "=== Orderbook Trading System ===" << std::endl;
     std::cout << "Loading orders from: " << filename << std::endl;
-    std::cout << "Logs will be written to: logs/transactions.log and logs/errors.log\n" << std::endl;
+    // std::cout << "Logs will be written to: logs/transactions.log and logs/errors.log\n" << std::endl;
     
     loadOrdersFromCSV(filename, orders);
     
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    std::cout << "Loaded " << orders.size() << " orders successfully.\n" << std::endl;
+    // std::cout << "Loaded " << orders.size() << " orders successfully.\n" << std::endl;
 
     // timestamp before processing
     auto t0 = std::chrono::high_resolution_clock::now();
@@ -64,8 +64,8 @@ int main(int argc, char* argv[]) {
       << " requests in " << secs << " s  (" 
       << tput << " req/s)\n" << std::endl;
       
-    std::cout << "Check in logs/transactions.log for detailed transaction history." << std::endl;
-    std::cout << "Check in logs/errors.log for any errors encountered during processing." << std::endl;
+    std::cout << "Check logs/transactions.log for detailed transaction history." << std::endl;
+    std::cout << "Check logs/errors.log for any errors encountered during processing." << std::endl;
 
     // Shutdown logging system
     shutdownLogger();

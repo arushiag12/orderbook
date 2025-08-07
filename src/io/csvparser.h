@@ -8,8 +8,8 @@
 #include <memory>
 #include <iostream>
 #include "orderdata.h"
-#include "../core/basicdefs.h"
-#include "../utils/logger.h"
+#include "core/basicdefs.h"
+#include "utils/logger.h"
 
 using namespace basicdefs;
 using namespace orderdata;
