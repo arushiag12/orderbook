@@ -1,35 +1,35 @@
 #include <iostream>
 #include <vector>
 #include <chrono> 
-#include "requests.h"
-#include "orderbook.h"
-#include "orders.h"
-#include "basicdefs.h"
-#include "csvparser_simple.h"
-#include "output.h"
-#include "logger.h"
+#include "io/requests.h"
+#include "core/orderbook.h"
+#include "core/orders.h"
+#include "core/basicdefs.h"
+#include "io/csvparser.h"
+#include "io/output.h"
+#include "utils/logger.h"
 
 using namespace basicdefs;
 using namespace orders;
 using namespace orderbook;
 using namespace requests;
-using namespace csvparser_simple;
+using namespace csvparser;
 using namespace output_orderbook;
 using namespace logger;
 
 int main(int argc, char* argv[]) {
     // Initialize logging system
-    initializeLogger("transactions.log", "errors.log");
+    initializeLogger("logs/transactions.log", "logs/errors.log");
     
     Orderbook orderbook;
     std::vector<std::unique_ptr<Request>> trades;
 
-    // Default to orders.csv if no filename provided
-    std::string filename = (argc > 1) ? argv[1] : "orders.csv";
+    // Default to data/orders.csv if no filename provided
+    std::string filename = (argc > 1) ? argv[1] : "data/orders.csv";
     
     std::cout << "=== Orderbook Trading System ===" << std::endl;
     std::cout << "Loading orders from: " << filename << std::endl;
-    std::cout << "Logs will be written to: transactions.log and errors.log\n" << std::endl;
+    std::cout << "Logs will be written to: logs/transactions.log and logs/errors.log\n" << std::endl;
     
     loadOrdersFromCSV(filename, trades);
     
@@ -62,8 +62,8 @@ int main(int argc, char* argv[]) {
       << " requests in " << secs << " s  (" 
       << tput << " req/s)\n" << std::endl;
       
-    std::cout << "Check transactions.log for detailed transaction history." << std::endl;
-    std::cout << "Check errors.log for any errors encountered during processing." << std::endl;
+    std::cout << "Check logs/transactions.log for detailed transaction history." << std::endl;
+    std::cout << "Check logs/errors.log for any errors encountered during processing." << std::endl;
 
     // Shutdown logging system
     shutdownLogger();

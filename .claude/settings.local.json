@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(g++:*)",
+      "Bash(cmake:*)",
+      "Bash(./trades.exe)",
+      "Bash(find:*)",
+      "Bash(gcc:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "Bash(cp:*)",
+      "Bash(tree:*)"
+    ],
+    "deny": []
+  }
+}

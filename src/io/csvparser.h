@@ -1,5 +1,5 @@
-#ifndef CSVPARSER_SIMPLE_H
-#define CSVPARSER_SIMPLE_H
+#ifndef CSVPARSER_H
+#define CSVPARSER_H
 
 #include <fstream>
 #include <sstream>
@@ -8,16 +8,16 @@
 #include <memory>
 #include <iostream>
 #include "requests.h"
-#include "orders.h"
-#include "basicdefs.h"
-#include "logger.h"
+#include "../core/orders.h"
+#include "../core/basicdefs.h"
+#include "../utils/logger.h"
 
 using namespace basicdefs;
 using namespace orders;
 using namespace requests;
 using namespace logger;
 
-namespace csvparser_simple {
+namespace csvparser {
 
 std::vector<std::string> split(const std::string& line, char delimiter) {
     std::vector<std::string> tokens;
