@@ -2,6 +2,8 @@
 #   define ORDERS_H
 
 #include<tuple>
+#include<chrono>
+#include<atomic>
 #include "basicdefs.h"
 
 using basicdefs::Price;
@@ -13,28 +15,38 @@ namespace orders {
 struct Order {
     Order() = delete;
     Order(Side side, Price price, Quantity quantity) 
-        : side(side), price(price), quantity(quantity), id(currOrderIdCount++) {}
+        : side(side), price(price), quantity(quantity), 
+          id(getNextOrderId()), timestamp(std::chrono::steady_clock::now()) {}
     virtual ~Order() = default;
-
-    static OrderId currOrderIdCount;
 
     Side side;
     Price price;
     Quantity quantity;
     OrderId id;
+    std::chrono::steady_clock::time_point timestamp;
+
+    static OrderId getNextOrderId() {
+        static std::atomic<OrderId> orderIdCounter{1};
+        return orderIdCounter.fetch_add(1);
+    }
 
     bool operator<(const Order& other) const {
-        if (price == other.price) {
-            return quantity < other.quantity;
+        // For buy orders: higher price has priority, if same price then earlier time
+        // For sell orders: lower price has priority, if same price then earlier time
+        if (side == Side::BUY) {
+            if (price != other.price) {
+                return price < other.price; // Lower price has lower priority for buy
+            }
+        } else {
+            if (price != other.price) {
+                return price > other.price; // Higher price has lower priority for sell
+            }
         }
-        return price > other.price;
+        return timestamp > other.timestamp; // Later timestamp has lower priority
     }
 
     bool operator>(const Order& other) const {
-        if (price == other.price) {
-            return quantity > other.quantity;
-        }
-        return price < other.price;
+        return other < *this;
     }
 };
 

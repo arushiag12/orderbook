@@ -5,7 +5,9 @@
 #include "core/orderbook.h"
 #include "core/orders.h"
 #include "core/basicdefs.h"
+#include "io/orderdata.h"
 #include "io/csvparser.h"
+#include "io/processor.h"
 #include "io/output.h"
 #include "utils/logger.h"
 
@@ -13,7 +15,9 @@ using namespace basicdefs;
 using namespace orders;
 using namespace orderbook;
 using namespace requests;
+using namespace orderdata;
 using namespace csvparser;
+using namespace processor;
 using namespace output_orderbook;
 using namespace logger;
 
@@ -22,7 +26,7 @@ int main(int argc, char* argv[]) {
     initializeLogger("logs/transactions.log", "logs/errors.log");
     
     Orderbook orderbook;
-    std::vector<std::unique_ptr<Request>> trades;
+    std::vector<OrderData> orders;
 
     // Default to data/orders.csv if no filename provided
     std::string filename = (argc > 1) ? argv[1] : "data/orders.csv";
@@ -31,22 +35,20 @@ int main(int argc, char* argv[]) {
     std::cout << "Loading orders from: " << filename << std::endl;
     std::cout << "Logs will be written to: logs/transactions.log and logs/errors.log\n" << std::endl;
     
-    loadOrdersFromCSV(filename, trades);
+    loadOrdersFromCSV(filename, orders);
     
-    if (trades.empty()) {
+    if (orders.empty()) {
         std::cout << "No orders loaded. Exiting." << std::endl;
         shutdownLogger();
         return 1;
     }
     
-    std::cout << "Loaded " << trades.size() << " orders successfully.\n" << std::endl;
+    std::cout << "Loaded " << orders.size() << " orders successfully.\n" << std::endl;
 
     // timestamp before processing
     auto t0 = std::chrono::high_resolution_clock::now();
 
-    for (auto& request : trades) {
-        processRequest(move(request), orderbook);
-    }
+    processOrders(orders, orderbook);
 
     // timestamp after processing
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -54,16 +56,16 @@ int main(int argc, char* argv[]) {
 
     // compute and print throughput
     double secs = diff.count();
-    double tput = trades.size() / secs;
+    double tput = orders.size() / secs;
 
-    std::cout << orderbook;
+    // std::cout << orderbook;
     std::cout 
-      << "\nProcessed " << trades.size() 
+      << "\nProcessed " << orders.size() 
       << " requests in " << secs << " s  (" 
       << tput << " req/s)\n" << std::endl;
       
-    std::cout << "Check logs/transactions.log for detailed transaction history." << std::endl;
-    std::cout << "Check logs/errors.log for any errors encountered during processing." << std::endl;
+    std::cout << "Check in logs/transactions.log for detailed transaction history." << std::endl;
+    std::cout << "Check in logs/errors.log for any errors encountered during processing." << std::endl;
 
     // Shutdown logging system
     shutdownLogger();

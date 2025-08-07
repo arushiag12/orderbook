@@ -11,7 +11,14 @@
       "Bash(mv:*)",
       "Bash(rm:*)",
       "Bash(cp:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(./build/trades.exe)",
+      "Bash(mingw32-make:*)",
+      "Bash(git restore:*)",
+      "Bash(dir:*)",
+      "Bash(./test_compile.exe)",
+      "Bash(./build/trades.exe data/orders.csv)",
+      "Bash(timeout:*)"
     ],
     "deny": []
   }

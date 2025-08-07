@@ -7,14 +7,12 @@
 #include <vector>
 #include <memory>
 #include <iostream>
-#include "requests.h"
-#include "../core/orders.h"
+#include "orderdata.h"
 #include "../core/basicdefs.h"
 #include "../utils/logger.h"
 
 using namespace basicdefs;
-using namespace orders;
-using namespace requests;
+using namespace orderdata;
 using namespace logger;
 
 namespace csvparser {
@@ -34,7 +32,7 @@ Side parseSide(const std::string& side_str) {
     return (side_str == "BUY") ? Side::BUY : Side::SELL;
 }
 
-void loadOrdersFromCSV(const std::string& filename, std::vector<std::unique_ptr<Request>>& requests) {
+void loadOrdersFromCSV(const std::string& filename, std::vector<OrderData>& orders) {
     std::ifstream file(filename);
     std::string line;
     int line_number = 0;
@@ -137,22 +135,9 @@ void loadOrdersFromCSV(const std::string& filename, std::vector<std::unique_ptr<
             
             Side side = parseSide(side_str);
             
-            // Create requests
-            if (action == "ADD") {
-                if (order_type == "MARKET") {
-                    requests.push_back(std::make_unique<AddRequest<MarketOrder>>(side, price, quantity));
-                } else if (order_type == "LIMIT") {
-                    requests.push_back(std::make_unique<AddRequest<LimitOrder>>(side, price, quantity));
-                }
-                successful_orders++;
-            } else if (action == "CANCEL") {
-                if (order_type == "MARKET") {
-                    requests.push_back(std::make_unique<CancelRequest<MarketOrder>>(side, order_id));
-                } else if (order_type == "LIMIT") {
-                    requests.push_back(std::make_unique<CancelRequest<LimitOrder>>(side, order_id));
-                }
-                successful_orders++;
-            }
+            // Create OrderData objects
+            orders.emplace_back(action, order_type, side, price, quantity, order_id);
+            successful_orders++;
             
         } catch (const std::exception& e) {
             std::string error_msg = "Exception parsing line " + std::to_string(line_number) + ": " + e.what();

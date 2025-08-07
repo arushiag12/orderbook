@@ -7,6 +7,10 @@
 #include <memory>
 #include <type_traits>
 
+using basicdefs::Side;
+using basicdefs::Price;  
+using basicdefs::Quantity;
+using basicdefs::OrderId;
 using orders::CheckValidOrderType_v;
 using orders::OrderTypes;
 using orderbook::Orderbook;

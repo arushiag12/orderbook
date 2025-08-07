@@ -8,7 +8,7 @@
 using orders::Order;
 namespace my_list{
 
-void addItem(std::unique_ptr<Order>& order, std::list<std::unique_ptr<Order>>& l) {
+inline void addItem(std::unique_ptr<Order>& order, std::list<std::unique_ptr<Order>>& l) {
     auto it = l.begin();
     if (it == l.end()) {
         l.push_back(std::move(order));
@@ -20,7 +20,7 @@ void addItem(std::unique_ptr<Order>& order, std::list<std::unique_ptr<Order>>& l
     }
 }
 
-void deleteItem(OrderId id, std::list<std::unique_ptr<Order>>& l) {
+inline void deleteItem(OrderId id, std::list<std::unique_ptr<Order>>& l) {
     auto it = l.begin();
     while (it != l.end()) {
         if ((*it)->id == id) {

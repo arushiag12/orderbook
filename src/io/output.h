@@ -6,7 +6,7 @@
 #include "../core/orderbook.h"
 namespace output_orderbook {
 
-std::ostream& operator<<(std::ostream& os, const Orderbook& orderbook) {
+inline std::ostream& operator<<(std::ostream& os, const Orderbook& orderbook) {
 
     os << "Orderbook\n";
     os << "========================================\n";
